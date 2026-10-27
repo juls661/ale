@@ -1,0 +1,10 @@
+node_modules/
+dist/
+release/
+**/bin/
+**/obj/
+package-lock.json
+test-results/
+playwright-report/
+.planning/
+*.svg

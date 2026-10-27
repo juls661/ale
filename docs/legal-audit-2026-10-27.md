@@ -1,0 +1,59 @@
+# Ale: second compliance audit
+
+**Reviewed:** October 27, 2026. **Scope confirmed by the owner:** personal use now; a future free release intended for the United States. **Result:** specific engineering/documentation gaps corrected; public release is not yet legally cleared or certified. This is a source/package review supported by official materials, not a lawyer’s legal opinion, an Apple approval, or a complete rights/territory search.
+
+## Concrete findings and corrections
+
+| Finding                                                   | Evidence and correction                                                                                                                                                                                                                                                                                                                                                                                | Status                                                       |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| Wrong .NET third-party notice source                      | The package copied the build SDK’s notice file. Its content differed from the actual 10.0.14 runtime notice and omitted the runtime’s zlib-ng section. Packaging now resolves the published `Ale.deps.json` versions and copies each runtime’s own legal files, plus the matching WebView2 SDK files. A manifest records file hashes. Tests require exact fixture contents and reject missing notices. | Corrected in packaging; exact output checked during rebuild. |
+| Incomplete Apple trademark presentation                   | Product copy had an all-capitals Apple Music label, no first-body-use U.S. notation, and a shorter credit line. Display copy and README were corrected. Apple’s current trademark list identifies Apple Music®; that current list was followed where the older identity page refers to a service-mark symbol.                                                                                          | Corrected; final release branding still needs review.        |
+| Source license described too broadly as mandatory         | The earlier checklist said to choose a source license before publishing. GitHub permits public repositories without one. The checklist now distinguishes public hosting from granting open-source reuse rights or defining binary-use permissions. No license was selected on the owner’s behalf.                                                                                                      | Corrected.                                                   |
+| Privacy notice needed an effective date and clearer scope | Added the effective date, personal-to-free-U.S.-release scope, update practice, outstanding publisher/contact requirement, and a distinction between README badge requests and installed-player behavior.                                                                                                                                                                                              | Improved; public publisher/contact details remain open.      |
+| AI disclaimer could be mistaken for protection            | README now states that AI disclosure does not waive obligations or establish non-infringement. AI-generated output and human contributions require a separate rights analysis.                                                                                                                                                                                                                         | Clarified; no liability exemption claimed.                   |
+
+## Code and dependency checks
+
+- MusicKit is loaded as Apple’s standalone CDN script after connection is requested; it is not copied, modified, or rebundled in the shipped frontend. The current code offers user-initiated playback and standard media controls, with no Apple-content export, ripping, capture, or DRM bypass. Full protected-track operation is still unverified. [Apple developer agreement, MusicKit section](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/).
+- No Cider package, source import, logo, binary, or copied asset was identified in the reviewed implementation. This finding is not an exhaustive infringement or similarity analysis of AI-generated code. App illustrations and README screenshots contain no included commercial recordings or fetched album covers.
+- The shipped frontend dependency set is React, React DOM and Scheduler under MIT; their full notices are copied. Native packages are .NET Runtime, Windows Desktop Runtime and WebView2 SDK; the exact installed package legal files and published versions are used. This is a checked inventory of the current build, not a guarantee about future dependency changes.
+- No Ale-operated backend, analytics, advertising, account system, payment flow, or LAN remote service was found. Files are selected explicitly; Ale keeps its own queue/state/token in memory. Apple’s SDK and Microsoft’s runtime can make their own requests and retain data; the privacy notice distinguishes those services. A credentialed network/storage test remains necessary.
+- The scope is personal listening. No public-performance or redistribution rights for music are granted by Ale. A future remote-control feature needs its own security, privacy and service-terms review.
+
+## Before a free U.S. release
+
+| Open item                     | Required next action                                                                                                                                                                                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Real service behavior         | Test Apple authorization, subscription entitlement, full-track playback, sign-out/profile clearing and standard controls on Windows. Do not advertise these as verified until they are. Confirm the account’s applicable developer/service agreements.     |
+| Publisher and privacy contact | Supply the actual operator name and a working contact method, host a stable policy, verify the SDK/runtime’s actual storage/network behavior, and review applicable state/federal privacy duties. No identity or address has been invented.                |
+| Source and binary permissions | Decide whether to offer an open-source license or keep source rights reserved, and specify how recipients may use/distribute the Windows binary. Free price and public GitHub visibility do not themselves supply general reuse permission.                |
+| Ale name clearance            | Conduct a proper search for confusingly similar names for related software/services, including relevant unregistered use. No trademark clearance or registration is claimed here.                                                                          |
+| Accessibility                 | Test Narrator, keyboard-only operation, high contrast, display scaling and Apple’s dialogs on Windows. Automated WCAG checks do not establish ADA compliance. Determine actual legal coverage for the release/operator/audience.                           |
+| Public claims and security    | Keep preview/unsigned/untested limitations visible, review release claims and dependencies, and set a practical update/security-reporting process. Signing is a platform/release trust measure here, not asserted to be a universal statutory requirement. |
+
+CCPA coverage depends on statutory business/processing conditions. Other duties, including California online privacy disclosure requirements, may require a separate analysis; no revenue-threshold blanket exemption is asserted. A free offering does not automatically remove consumer-protection obligations. U.S.-only is the intended scope, not a claimed technical geofence or a conclusion that no other jurisdiction can ever matter.
+
+The AI disclaimer is a transparency statement, not proof that all source is protectable, non-infringing, secure, accessible, or compliant. Public distribution should receive a qualified U.S. legal review if the owner needs a legal conclusion rather than this engineering audit.
+
+## Official references rechecked
+
+- [Apple Developer Program License Agreement](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/), MusicKit section: approved service usage and playback/content limits.
+- [Apple Music Identity Guidelines](https://marketing.services.apple/apple-music-identity-guidelines) and [current Apple Trademark List](https://www.apple.com/legal/intellectual-property/trademark/appletmlist.html): attribution, spelling, symbols and presentation.
+- [GitHub licensing guidance](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository): public hosting without a selected source license.
+- [U.S. Copyright Office AI materials](https://www.copyright.gov/ai/): copyrightability of AI output and human contributions; disclosure does not settle rights.
+- [USPTO clearance guidance](https://www.uspto.gov/trademarks/search/comprehensive-clearance-search-similar-trademarks): a proper trademark search extends beyond an exact-name lookup.
+- [California Attorney General CCPA information](https://oag.ca.gov/privacy/ccpa) and [California Attorney General privacy-policy guidance](https://oag.ca.gov/sites/all/files/agweb/pdfs/cybersecurity/making_your_privacy_practices_public.pdf): applicability and disclosure review. The current legislative page for section 22575 returned HTTP 403 during this session; no claim of a complete current statutory analysis is made.
+- [FTC app marketing/privacy guidance](https://www.ftc.gov/business-guidance/resources/marketing-your-mobile-app-get-it-right-start): substantiate public claims and describe data practices accurately.
+- [DOJ accessibility guidance](https://www.ada.gov/resources/web-guidance/) and [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/): legal-context and technical accessibility review, without conflating automated tests with certification.
+- Exact license/notice texts were inspected locally from the installed npm/NuGet packages and compared with the generated Windows package.
+
+## Verification after correction
+
+- 16 unit tests passed, including the two runtime-notice regressions.
+- 8 production browser tests passed, including desktop/narrow accessibility scans.
+- 12 native navigation-policy checks passed; the Windows app rebuilt successfully.
+- All five required native legal-file hashes matched the rebuilt package; the actual runtime’s zlib-ng notice is present and the substituted SDK notice is absent.
+- Source and packaged documentation links passed; formatting and lint passed.
+- A separate AI reviewer checked the license collector and published manifest. Its packaging usability finding was also fixed: the standalone token helper referenced by the bundled setup guide is now included. This is an engineering review, not independent legal counsel.
+
+Real Apple account/Windows acceptance and the open public-release items above remain unverified.

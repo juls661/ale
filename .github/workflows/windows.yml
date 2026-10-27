@@ -1,0 +1,29 @@
+name: Verify and build Ale for Windows
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npm run check
+      - run: npm run windows:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ale-win-x64-preview
+          path: release/Ale-win-x64/
+          if-no-files-found: error

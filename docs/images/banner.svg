@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title description">
+  <title id="title">Ale — Your music. Your space.</title>
+  <desc id="description">A warm amber record on an olive-black background. Independent Windows music player. Developer preview.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1"><stop stop-color="#181d17"/><stop offset="1" stop-color="#101410"/></linearGradient>
+    <linearGradient id="amber" x2="1" y2="1"><stop stop-color="#f4c594"/><stop offset="1" stop-color="#ce9664"/></linearGradient>
+    <radialGradient id="vinyl"><stop stop-color="#35402e"/><stop offset="1" stop-color="#20271f"/></radialGradient>
+  </defs>
+  <rect width="1200" height="340" rx="22" fill="url(#background)"/>
+  <rect x=".5" y=".5" width="1199" height="339" rx="22" fill="none" stroke="#3b4633"/>
+  <g opacity=".65" fill="none" stroke="#46523a"><circle cx="1020" cy="172" r="200"/><circle cx="1020" cy="172" r="240"/><circle cx="1020" cy="172" r="280"/></g>
+  <g transform="translate(54 42)">
+    <g fill="#efb17d" transform="rotate(18 18 18)"><rect x="0" y="8" width="6" height="25" rx="3"/><rect x="11" y="0" width="6" height="37" rx="3"/><rect x="22" y="16" width="6" height="17" rx="3"/></g>
+    <text x="46" y="33" font-family="Segoe UI,Arial,sans-serif" font-size="43" font-weight="700" letter-spacing="-2" fill="#f3f0e8">ale<tspan fill="#efb17d">.</tspan></text>
+  </g>
+  <text x="56" y="158" font-family="Segoe UI,Arial,sans-serif" font-size="49" font-weight="600" letter-spacing="-1.8" fill="#f4eee1">Your music. Your space.</text>
+  <text x="58" y="196" font-family="Segoe UI,Arial,sans-serif" font-size="17" fill="#b7c2aa">An independent Windows player, inspired by the joy of listening.</text>
+  <g transform="translate(56 236)"><rect width="146" height="30" rx="15" fill="#efb17d"/><text x="73" y="20" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#20261b">WINDOWS PLAYER</text><rect x="158" width="170" height="30" rx="15" fill="#273021" stroke="#526143"/><circle cx="175" cy="15" r="3" fill="#c5d99c"/><text x="252" y="20" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#d8e2c9">DEVELOPER PREVIEW</text></g>
+  <g transform="translate(1000 166) rotate(-13)">
+    <circle r="139" fill="#0a0f09" opacity=".35" transform="translate(8 11)"/>
+    <circle r="137" fill="url(#vinyl)" stroke="#677151"/>
+    <g fill="none" stroke="#48533b" stroke-width="1" opacity=".65"><circle r="130"/><circle r="124"/><circle r="118"/><circle r="112"/><circle r="106"/><circle r="100"/><circle r="94"/><circle r="88"/><circle r="82"/><circle r="76"/></g>
+    <circle r="62" fill="url(#amber)"/><text y="5" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="38" font-weight="700" letter-spacing="-2" fill="#2e3625">ale.</text><text y="23" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="6" letter-spacing="1.8" fill="#343c2c">SIDE A · YOUR SOUND</text><circle cy="37" r="4" fill="#303a25"/>
+  </g>
+  <text x="58" y="307" font-family="Segoe UI,Arial,sans-serif" font-size="9" letter-spacing="2.2" fill="#a8b69b">LESS NOISE. MORE FEELING.</text>
+</svg>

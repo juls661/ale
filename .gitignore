@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Frontend and desktop build output
+dist/
+dist-ssr/
+release/
+**/bin/
+**/obj/
+
+# Test output
+playwright-report/
+test-results/
+
+# Local secrets and environment settings
+.env
+.env.*
+!.env.example
+*.local
+*.p8
+*.p12
+*.pfx
+
+# Logs
+logs/
+*.log
+
+# Local planning notes (preserved, not published)
+.planning/
+
+# Generated screenshots; the curated desktop image and banner are committed
+# along with the documentation.
+docs/images/ale-settings.png
+docs/images/ale-narrow.png
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
