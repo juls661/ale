@@ -22,6 +22,8 @@ open desktop/macos/Ale.xcodeproj
 
 Choose the **Ale** scheme and **My Mac**, then Run. Run `npm run macos:prepare` again after frontend, privacy or dependency changes; it rebuilds the frontend and stages `build/macos/resources/` with exact dependency licenses. Xcode uses its standard resource-copy phase. Generated resources are excluded from Git.
 
+The Xcode navigator groups the native files under **App** and generated frontend/notices under **Bundled Resources**. Resource entries use short filenames; the containing group resolves their shared location.
+
 The owner's original Documents project has also been connected to these same repository sources and generated resources. Its original `project.pbxproj` was preserved beside it as `project.pbxproj.before-ale-port`. Its template source files were retained outside target membership. The portable project above is the shared version; the original project depends on its current relative location beside `Documents/ChatGPT/ale`.
 
 ## Enable real Apple Music

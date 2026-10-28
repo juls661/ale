@@ -12,6 +12,8 @@ Verification after the moves:
 - 46 relative documentation links resolved. Native package inputs and packaged frontend, privacy and license resources were checked at the new paths.
 - An independent read-only layout review found no major issue. A stale test-path reference in the historical implementation plan was corrected.
 
+Follow-up: Xcode's linked-file navigator labels still displayed raw repository paths. Both project navigators now group files under App and Bundled Resources with short resource filenames. The corrected labels were observed in the owner's open Xcode window, and both Xcode targets were rebuilt after the grouping change.
+
 These checks verify the layout/build refactor; the live-account, runtime and public-release limitations recorded below still apply.
 
 ---
