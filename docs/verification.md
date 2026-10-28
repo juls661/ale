@@ -1,3 +1,25 @@
+# Mac port verification — October 28, 2026
+
+Scope: shared interface plus a new macOS 14+ Swift/WebKit/MusicKit host. No live Apple credentials were used and no MusicKit permission was granted by the agent.
+
+| Check                                | Result                                                                                                                                                                                                                                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Node unit/regression suite           | 22 passed, including native permission denial, playback rejection, revocation, unsafe artwork/links, stopped-track stale events and a status reply sampled during a pending play operation. The latter regression was observed failing before the fix. |
+| TypeScript production build / ESLint | Passed. Shared Windows SDK flow remains covered by existing tests.                                                                                                                                                                                     |
+| Production Chromium                  | 9 scenarios passed, including real synthesized WAV playback and the new Mac-native UI transport path.                                                                                                                                                  |
+| Production WebKit                    | All 9 scenarios passed in the final serial run, including real WAV playback, keyboard navigation, native transport UI and accessibility checks.                                                                                                        |
+| Native URL/resource/bridge policy    | 23 assertions passed: exact origin, spoofed/userinfo/port URLs, traversal, missing resources, symlink escape and subframe/remote bridge rejection.                                                                                                     |
+| Universal Mac build                  | Both arm64 and x86_64 compiled with warnings treated as errors; Mach-O architectures and local ad-hoc signature verified.                                                                                                                              |
+| Xcode integration                    | Portable `macos/Ale.xcodeproj` and the owner's original Documents project compiled with signing disabled. Standard Xcode resource copying includes frontend and dependency notices.                                                                    |
+| Native app observation               | Home and Mac-specific Settings rendered in the actual app. The native file picker imported an original 30-second synthesized WAV; playback reached 0:30 and stopped at the end. This observation is separate from browser transport stubs.             |
+| Independent AI review                | No additional confirmed major findings after identifying native lifecycle, termination and download controls. Native operations now invalidate stale completions; termination stops the player and navigation download requests are cancelled.         |
+
+Remaining: real signed/provisioned native MusicKit connect/search/library and full subscription playback; natural Apple queue completion; native Apple media controls; interruption/network-error behavior; Intel runtime testing; older macOS runtime testing; VoiceOver and complete keyboard/display review; distribution signing/notarization and legal release clearance. Builds and stub transport tests do not prove these behaviors.
+
+The first WebKit browser attempt could not launch because its runtime was absent. After installing the test runtime, eight scenarios passed and the skip-link test exposed a Safari keyboard convention: Option-Tab focuses links by default. The native host explicitly enables Tab-to-link focus. A later parallel attempt timed out during concurrent build activity; after the build finished, all nine scenarios passed serially in 24.5 seconds. No product timeout or OS keyboard preference was changed to obtain this result.
+
+---
+
 # Ale verification — 2026-10-27
 
 Target: Windows 11 x64 developer preview. Build/check host: macOS ARM64, Node 24, .NET SDK 10.0.403. Source branch: `codex/ale-windows`. Original user starter files were retained and developed in this checkout; no merge, push, public release or GitHub Actions run was performed.

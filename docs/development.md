@@ -4,13 +4,14 @@
 
 ## Requirements
 
-| Task                         | Required tools                                                 |
-| ---------------------------- | -------------------------------------------------------------- |
-| Develop the interface        | Node.js 24 and npm                                             |
-| Run browser tests            | Node.js 24 and Playwright Chromium                             |
-| Build the Windows app        | Node.js 24 and .NET 10 SDK                                     |
-| Run the Windows app          | Windows 11 x64 and WebView2 Evergreen Runtime                  |
-| Play full Apple Music tracks | Developer token, user authorization and an active subscription |
+| Task                         | Required tools                                                          |
+| ---------------------------- | ----------------------------------------------------------------------- |
+| Develop the interface        | Node.js 24 and npm                                                      |
+| Run browser tests            | Node.js 24 and Playwright Chromium / WebKit                             |
+| Build/run the Mac app        | macOS 14+, Xcode and Node.js 24                                         |
+| Build the Windows app        | Node.js 24 and .NET 10 SDK                                              |
+| Run the Windows app          | Windows 11 x64 and WebView2 Evergreen Runtime                           |
+| Play full Apple Music tracks | Platform-specific MusicKit setup, permission and an active subscription |
 
 You can develop and cross-compile from macOS. The resulting `Ale.exe` must be tested on Windows. The .NET runtime is bundled with the self-contained build; the playback PC does not need the SDK.
 
@@ -101,3 +102,18 @@ Start the app in one terminal, then run `npm run screenshots` in another. Captur
 Keep `.p8`, `.p12`, `.pfx`, tokens and `.env` files out of Git. Ignore rules reduce accidental additions but do not scan for secrets already embedded in source. Inspect changes before publishing and never attach browser profiles to issues.
 
 Local implementation notes are preserved in the ignored `.planning/` directory. Public-facing guides and release records live in `docs/`.
+
+## macOS development
+
+The Mac port reuses the frontend in a sandboxed Swift/WebKit host and uses native MusicKit for Apple Music. Requires macOS 14+ and Xcode; Node.js 24 builds the interface.
+
+```sh
+npm ci
+npm run macos:build
+```
+
+This runs the frontend production build, stages dependency notices, checks the native navigation/resource policy, compiles Apple silicon and Intel binaries, and assembles an ad-hoc signed development app at `release/Ale-mac-universal/Ale.app`.
+
+For Xcode: `npm run macos:prepare`, then open `macos/Ale.xcodeproj`, choose Ale / My Mac and Run. Repeat preparation after frontend/dependency/privacy changes. Xcode uses standard resource copying, with build-script sandboxing left enabled. The repository Xcode project has no personal signing team. Account-dependent Apple Music setup and the owner's original-project integration are explained in [the Mac guide](macos.md).
+
+Native checks: `npm run macos:test`. Browser checks: `ALE_PRODUCTION=1 npx playwright test --browser chromium` or `--browser webkit` after installing the corresponding Playwright runtime. The Mac CI workflow runs both and builds the Xcode target. Live MusicKit authorization/subscription playback cannot be tested with transport stubs.

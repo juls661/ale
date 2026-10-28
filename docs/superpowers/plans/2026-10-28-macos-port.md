@@ -32,10 +32,10 @@
 
 **Interfaces:** `NativeMusicBridge` handles `connect`, `disconnect`, `search`, `library`, `play`, `resume`, `pause`, `stop`, `seek`, `status`; WebKit replies contain JSON objects. Native tracks match the existing Track type. `NavigationPolicy` validates local URLs, external Apple links and resource paths.
 
-- [ ] Write native security checks with literal allowed/denied URL and traversal fixtures; run and observe failure before implementation.
-- [ ] Implement the Swift host, resource handler, permission boundary and native MusicKit adapter.
-- [ ] Add relative frontend bundle paths and reproducible unsigned development app packaging with frontend notices.
-- [ ] Run native checks and compile the complete host; inspect packaged resources.
+- [x] Write native security checks with literal allowed/denied URL and traversal fixtures; run and observe failure before implementation.
+- [x] Implement the Swift host, resource handler, permission boundary and native MusicKit adapter.
+- [x] Add relative frontend bundle paths and reproducible unsigned development app packaging with frontend notices.
+- [x] Run native checks and compile the complete host; inspect packaged resources.
 
 ### Task 2: Shared frontend Mac adapter
 
@@ -43,16 +43,16 @@
 
 **Interfaces:** `MusicService` preserves the existing AppleMusicService contract. `NativeAppleMusicService` maps bridge commands to that contract. `createMusicService()` selects the native adapter only when the host bridge exists.
 
-- [ ] Test denied authorization, playback failure, state/ended delivery, stale reply isolation and disconnect handling; observe RED.
-- [ ] Implement the adapter and platform selection, keeping the Windows SDK path intact.
-- [ ] Update Mac connection/privacy/accessibility/volume copy and controls.
-- [ ] Run unit/lint/build, production browser checks and native compile; commit and push the working port.
+- [x] Test denied authorization, playback failure, state/ended delivery, stale reply isolation and disconnect handling; observe RED.
+- [x] Implement the adapter and platform selection, keeping the Windows SDK path intact.
+- [x] Update Mac connection/privacy/accessibility/volume copy and controls.
+- [x] Run unit/lint/build, production browser checks and native compile; commit and push the working port.
 
 ### Task 3: Repository presentation, release record and integration
 
 **Files:** README.md, docs/macos.md, docs/privacy.md, docs/compliance.md, docs/verification.md, THIRD_PARTY_NOTICES.md, .github/workflows/macos.yml, .gitignore.
 
-- [ ] Document Mac setup, the owner-created Xcode integration and exact verification limits.
-- [ ] Add Mac build CI and ignore generated Xcode user/build state.
-- [ ] Review full diff and native trust/lifecycle boundaries; resolve significant findings with regression coverage.
-- [ ] Run final checks, update the verification record, commit and push the documentation milestone.
+- [x] Document Mac setup, the owner-created Xcode integration and exact verification limits.
+- [x] Add Mac build CI and ignore generated Xcode user/build state.
+- [x] Review full diff and native trust/lifecycle boundaries; resolve significant findings with regression coverage.
+- [x] Run final checks, update the verification record, commit and push the documentation milestone.

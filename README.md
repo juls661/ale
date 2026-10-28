@@ -5,20 +5,21 @@
 **A Cider-inspired music player with its own name, code, and character.**
 
 ![Status: developer preview](https://img.shields.io/badge/status-developer_preview-EFB17D?style=flat-square&labelColor=20261B)
-![Platform: Windows 11 x64](https://img.shields.io/badge/platform-Windows_11_x64-C9D8B5?style=flat-square&labelColor=20261B)
+![Platform: Windows and macOS](https://img.shields.io/badge/platform-Windows_11_%2B_macOS_14-C9D8B5?style=flat-square&labelColor=20261B)
 ![React and TypeScript](https://img.shields.io/badge/interface-React_%2B_TypeScript-C9D8B5?style=flat-square&labelColor=20261B)
 ![.NET 10 and WebView2](https://img.shields.io/badge/desktop-.NET_10_%2B_WebView2-C9D8B5?style=flat-square&labelColor=20261B)
+![Swift and MusicKit](https://img.shields.io/badge/mac-Swift_%2B_MusicKit-EFB17D?style=flat-square&labelColor=20261B)
 
-[Get started](#get-started) · [Apple Music setup](docs/apple-music.md) · [Build & test](docs/development.md) · [Privacy](docs/privacy.md)
+[Get started](#get-started) · [Mac & Xcode](docs/macos.md) · [Windows Apple Music setup](docs/apple-music.md) · [Build & test](docs/development.md) · [Privacy](docs/privacy.md)
 
 </div>
 
 ---
 
-Ale brings local audio and an official Apple Music® integration into a quiet, focused Windows app. It is built with React and TypeScript, hosted in a dedicated .NET / WebView2 desktop window, and can be developed on a Mac.
+Ale brings local audio and an official Apple Music® integration into a quiet, focused desktop app for **Windows and Mac**. Both platforms share the same React and TypeScript interface. Windows uses .NET and WebView2; macOS uses a native Swift/WebKit host and Apple's MusicKit framework.
 
 > [!IMPORTANT]
-> **This is a developer preview.** Local audio playback has been tested in a browser, and the Windows executable compiles. Real Windows startup, Apple sign-in, and full protected Apple Music playback still need testing on a Windows PC. The native iPhone remote is planned for a later milestone.
+> **This is a developer preview.** The Mac app builds for Apple silicon and Intel, both Xcode projects compile, and local WAV import/playback has been observed in the native Mac app. Real Apple Music subscription playback still needs a signed app and live account test. Windows startup and full protected playback remain unverified on a Windows PC. The iPhone remote is a later milestone.
 
 ![Ale desktop interface showing the listening space and playback controls](docs/images/ale-desktop.png)
 
@@ -27,14 +28,32 @@ Ale brings local audio and an official Apple Music® integration into a quiet, f
 | Your music                                          | Your listening space                                         |
 | --------------------------------------------------- | ------------------------------------------------------------ |
 | Open local MP3, WAV, M4A, AAC, OGG, and FLAC files¹ | Play, pause, seek, skip, and adjust volume                   |
-| Connect through Apple’s official MusicKit sign-in   | Queue tracks, shuffle, and repeat                            |
+| Connect through official MusicKit authorization     | Queue tracks, shuffle, and repeat                            |
 | Search the Apple Music catalog                      | Keyboard controls, visible focus, and screen-reader labels   |
 | Browse catalog-backed songs from your library²      | Reduced motion, responsive layout, and high-contrast support |
 | Keep local files on your computer                   | No Ale accounts, ads, analytics, or rented server            |
 
-¹ Format support depends on the playback runtime. ² The preview reads the first 100 library songs and plays catalog-backed items; uploaded-only songs and pagination are not implemented.
+¹ Format support depends on the playback runtime. On Mac, Apple Music volume uses system controls; Ale's volume slider remains available for local files. ² Library is limited to 100 songs. Windows/browser playback uses catalog-backed library items; the Mac port requests native playable songs. Library pagination is not implemented.
 
 ## Get started
+
+| Platform                          | Runtime                        | Build command           | Output                              |
+| --------------------------------- | ------------------------------ | ----------------------- | ----------------------------------- |
+| macOS 14+ · Apple silicon & Intel | Swift, WebKit, native MusicKit | `npm run macos:build`   | `release/Ale-mac-universal/Ale.app` |
+| Windows 11 · x64                  | .NET 10, WebView2              | `npm run windows:build` | `release/Ale-win-x64/Ale.exe`       |
+
+### Run the Mac preview
+
+With **Node.js 24** and **Xcode** installed, run from the repository root:
+
+```sh
+npm ci
+npm run macos:build
+```
+
+Open `release/Ale-mac-universal/Ale.app` and choose **Open files** to play unprotected audio you have the right to use. This is an ad-hoc signed local development build, not a notarized public release.
+
+For Xcode development, run `npm run macos:prepare`, then open **[macos/Ale.xcodeproj](macos/Ale.xcodeproj)** and choose **Ale → My Mac**. Native Apple Music requires your own development team, a registered app identifier with MusicKit App Service, and an active subscription. **No developer JWT is pasted into the Mac app.** Follow the [Mac setup guide](docs/macos.md) for signing, privacy, platform differences and remaining tests.
 
 ### Run the Windows preview
 
@@ -80,7 +99,7 @@ Building on macOS is supported; running the resulting executable requires Window
 </details>
 
 <details>
-<summary><strong>Connect Apple Music</strong></summary>
+<summary><strong>Connect Apple Music on Windows or in a browser</strong></summary>
 
 You need an **Apple Developer account**, a MusicKit media identifier/private key, and an **active Apple Music subscription** for full tracks.
 
@@ -92,9 +111,9 @@ Generate a signed developer token locally, then enter it in **Ale → Settings �
 
 ## Built with care, still a preview
 
-The initial verification record includes **14 unit tests, 8 production browser tests, and 12 native navigation-policy checks**. Tested Home, Settings, and Local files screens reported no axe violations for the selected WCAG rule tags at desktop and narrow widths. These are recorded test results, not a live CI badge or a full accessibility audit.
+The Mac port adds native security checks and adapter regressions to the shared player suite. The verification record includes **22 unit tests, 9 browser scenarios in each of Chromium and WebKit, and 23 Mac navigation/resource/bridge assertions**. Both Mac architectures compile; the portable Xcode project and the owner's original project build. Tested states reported no axe violations for the selected WCAG rule tags. These are recorded test results, not a live CI badge or a full accessibility audit.
 
-Real Windows playback, Apple’s own dialogs, Narrator, display scaling, and release-specific legal requirements remain open checks. Read the [verification record](docs/verification.md) and [compliance/release checklist](docs/compliance.md) for the exact limits.
+Live protected playback, Apple’s own dialogs, VoiceOver/Narrator, display scaling, and release-specific legal requirements remain open checks. Read the [verification record](docs/verification.md) and [compliance/release checklist](docs/compliance.md) for the exact limits.
 
 ## Vibe-code disclaimer
 
@@ -106,11 +125,12 @@ AI-generated code can contain mistakes, fragile assumptions, and security or acc
 
 ```text
 ale/
-├── .github/          Windows build workflow and contribution guide
+├── .github/          Windows/Mac build workflows and contribution guide
 ├── docs/             Setup guides, privacy, verification, and release review
 │   └── images/       Original README banner and interface screenshot
 ├── public/           Ale’s original SVG app mark
-├── scripts/          Windows packaging and local token generation
+├── macos/            Native Mac host, Xcode project and security checks
+├── scripts/          Desktop packaging and local token generation
 │   └── dev/          Development-only UI inspection helper
 ├── src/              React interface, components, and playback adapters
 ├── tests/            Unit, playback, and accessibility tests

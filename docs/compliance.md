@@ -1,5 +1,17 @@
 # Ale compliance and release record
 
+## Mac port update — October 28, 2026
+
+The Mac developer preview adds original Swift host code around the existing Ale interface. It uses native MusicKit, a MusicKit usage-purpose string, system-managed authorization, and a subscription entitlement check. No Apple passwords/developer JWTs are entered in the Mac app, no protected audio is captured, and no private SDK APIs or additional third-party native runtimes are included. Local file access is read-only and user-selected; the app sandbox allows outgoing connections, not a listener. Main-frame native messages and bundled resource paths are bounded by executable policy checks.
+
+Mac packages include exact installed React/React DOM/Scheduler notices and versions. The native player lacks a public per-app volume setter, so the UI directs Apple playback volume to Mac controls instead of implying an ineffective slider works. Privacy text distinguishes clearing Ale's temporary web state from revoking system MusicKit permission.
+
+Reviewed primary materials: [Apple's native authentication recommendation](https://developer.apple.com/documentation/applemusicapi/user-authentication-for-musickit), [automatic token/app-service setup](https://developer.apple.com/documentation/musickit/using-automatic-token-generation-for-apple-music-api), [MusicKit/developer terms](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/) and [App Sandbox](https://developer.apple.com/documentation/security/app-sandbox). Installed public macOS SDK interfaces were checked while implementing the port.
+
+Public distribution remains pending real signed MusicKit playback, publisher/contact and source/binary licensing decisions, name clearance, final Apple branding/terms review, VoiceOver/manual accessibility review, and appropriate signing/notarization or App Store review. The local ad-hoc signature is a development mechanism and does not establish publisher identity or distribution approval. This record documents controls and unresolved requirements; it does not certify legal compliance.
+
+## Windows review — October 27, 2026
+
 Reviewed 2026-10-27. Scope confirmed by the owner: personal use now, with a future free release offered in the United States, built on a Mac for Windows 11. The owner has confirmed access to a Windows PC and an Apple Developer account. This document records engineering controls and unresolved release questions; it is not a certification that every law in every jurisdiction has been satisfied.
 
 | Area                                       | Implemented control                                                                                                                                                                                                                | Remaining release work                                                                                                                                                                                                                                                                                                   |

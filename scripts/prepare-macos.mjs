@@ -7,6 +7,7 @@ const output = join(root, 'macos', 'Resources')
 rmSync(output, { recursive: true, force: true })
 mkdirSync(output, { recursive: true })
 cpSync(join(root, 'dist'), join(output, 'wwwroot'), { recursive: true })
+cpSync(join(root, 'macos', 'AleMac', 'Ale.icns'), join(output, 'Ale.icns'))
 const licenses = join(output, 'licenses')
 mkdirSync(licenses)
 for (const name of ['react', 'react-dom', 'scheduler']) {
