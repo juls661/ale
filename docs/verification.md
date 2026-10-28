@@ -1,3 +1,21 @@
+# Repository cleanup verification — October 28, 2026
+
+Moved native projects into `desktop/`, grouped tooling and tests by purpose, categorized documentation, and consolidated generated output under `build/`. Existing local exports, scratch files and unpublished research were preserved under the ignored `local/` folder. Playback source under `src/` was not changed.
+
+Verification after the moves:
+
+- 22 Node regressions passed; ESLint, production build and repository formatting passed.
+- All 9 production scenarios passed in Chromium and all 9 in WebKit from `tests/e2e/`.
+- 23 Mac policy assertions and 12 Windows policy assertions passed.
+- The universal Mac app packaged and its ad-hoc signature verified. Windows x64 cross-publish and exact runtime-notice collection passed using a temporary .NET 10.0.403 SDK/cache.
+- Both the relocated repository Xcode project and the owner's original Documents Xcode project compiled with signing disabled. The original project's references were updated with a separate configuration backup.
+- 46 relative documentation links resolved. Native package inputs and packaged frontend, privacy and license resources were checked at the new paths.
+- An independent read-only layout review found no major issue. A stale test-path reference in the historical implementation plan was corrected.
+
+These checks verify the layout/build refactor; the live-account, runtime and public-release limitations recorded below still apply.
+
+---
+
 # Mac port verification — October 28, 2026
 
 Scope: shared interface plus a new macOS 14+ Swift/WebKit/MusicKit host. No live Apple credentials were used and no MusicKit permission was granted by the agent.
@@ -10,7 +28,7 @@ Scope: shared interface plus a new macOS 14+ Swift/WebKit/MusicKit host. No live
 | Production WebKit                    | All 9 scenarios passed in the final serial run, including real WAV playback, keyboard navigation, native transport UI and accessibility checks.                                                                                                        |
 | Native URL/resource/bridge policy    | 23 assertions passed: exact origin, spoofed/userinfo/port URLs, traversal, missing resources, symlink escape and subframe/remote bridge rejection.                                                                                                     |
 | Universal Mac build                  | Both arm64 and x86_64 compiled with warnings treated as errors; Mach-O architectures and local ad-hoc signature verified.                                                                                                                              |
-| Xcode integration                    | Portable `macos/Ale.xcodeproj` and the owner's original Documents project compiled with signing disabled. Standard Xcode resource copying includes frontend and dependency notices.                                                                    |
+| Xcode integration                    | Portable `desktop/macos/Ale.xcodeproj` and the owner's original Documents project compiled with signing disabled. Standard Xcode resource copying includes frontend and dependency notices.                                                            |
 | Native app observation               | Home and Mac-specific Settings rendered in the actual app. The native file picker imported an original 30-second synthesized WAV; playback reached 0:30 and stopped at the end. This observation is separate from browser transport stubs.             |
 | Independent AI review                | No additional confirmed major findings after identifying native lifecycle, termination and download controls. Native operations now invalidate stale completions; termination stops the player and navigation download requests are cancelled.         |
 
@@ -61,8 +79,8 @@ Tests for these failures were observed failing and then passing after correction
 - Installation/signing/SmartScreen, updates, public release licensing/publisher/privacy/jurisdiction review. Current output is a portable unsigned developer preview.
 - Native iPhone remote, secure pairing and LAN server are not part of this release.
 
-See the [Apple Music setup guide](apple-music.md) and [README](../README.md) for Windows test and local token generation steps; do not send secrets or private keys in chat.
+See the [Apple Music setup guide](guides/apple-music.md) and [README](../README.md) for Windows test and local token generation steps; do not send secrets or private keys in chat.
 
 ## Second compliance pass
 
-For the personal-now / future-free-U.S.-release scope, the second review corrected exact-version runtime notice collection and trademark/documentation presentation. The unit suite now has 16 tests, including exact runtime notice copying and missing-notice rejection. See [the dated compliance audit](legal-audit-2026-10-27.md) for evidence and release gates. Earlier counts above remain the initial milestone record.
+For the personal-now / future-free-U.S.-release scope, the second review corrected exact-version runtime notice collection and trademark/documentation presentation. The unit suite now has 16 tests, including exact runtime notice copying and missing-notice rejection. See [the dated compliance audit](legal/audit-2026-10-27.md) for evidence and release gates. Earlier counts above remain the initial milestone record.

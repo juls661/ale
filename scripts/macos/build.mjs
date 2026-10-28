@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 
 if (process.platform !== 'darwin')
   throw new Error('The Mac app must be built on macOS with Xcode installed.')
-const root = resolve(import.meta.dirname, '..')
+const root = resolve(import.meta.dirname, '../..')
 function run(command, args) {
   const result = spawnSync(command, args, { cwd: root, stdio: 'inherit' })
   if (result.error) throw result.error
@@ -14,7 +14,7 @@ function run(command, args) {
 }
 run('npm', ['run', 'macos:prepare'])
 run('npm', ['run', 'macos:test'])
-const output = join(root, 'release', 'Ale-mac-universal')
+const output = join(root, 'build', 'releases', 'macos')
 rmSync(output, { recursive: true, force: true })
 const app = join(output, 'Ale.app')
 const contents = join(app, 'Contents')
@@ -22,7 +22,7 @@ const resources = join(contents, 'Resources')
 const binaries = join(contents, 'MacOS')
 mkdirSync(binaries, { recursive: true })
 mkdirSync(resources, { recursive: true })
-const sourceRoot = join(root, 'macos', 'AleMac')
+const sourceRoot = join(root, 'desktop', 'macos', 'AleMac')
 const sources = readdirSync(sourceRoot)
   .filter((name) => name.endsWith('.swift'))
   .map((name) => join(sourceRoot, name))
@@ -57,7 +57,7 @@ writeFileSync(
     'com.ale.player.development',
   ),
 )
-cpSync(join(root, 'macos', 'Resources'), resources, { recursive: true })
+cpSync(join(root, 'build', 'macos', 'resources'), resources, { recursive: true })
 run('codesign', [
   '--force',
   '--sign',
@@ -71,6 +71,6 @@ run('codesign', [
 run('codesign', ['--verify', '--strict', '--verbose=2', app])
 writeFileSync(
   join(output, 'START-HERE.txt'),
-  `Ale — macOS 14+ developer preview (Apple silicon and Intel)\n\nOpen Ale.app and select audio files you have the right to play.\nThis local build is ad-hoc signed, not notarized for distribution.\nNative Apple Music requires your own registered bundle identifier, MusicKit App Service and Apple development signing in Xcode.\nSee docs/macos.md in the repository for setup and known limits.\nNever disable Gatekeeper or share a private signing key.\n`,
+  `Ale — macOS 14+ developer preview (Apple silicon and Intel)\n\nOpen Ale.app and select audio files you have the right to play.\nThis local build is ad-hoc signed, not notarized for distribution.\nNative Apple Music requires your own registered bundle identifier, MusicKit App Service and Apple development signing in Xcode.\nSee docs/guides/macos.md in the repository for setup and known limits.\nNever disable Gatekeeper or share a private signing key.\n`,
 )
 console.log(`Mac developer build: ${app}`)

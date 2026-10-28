@@ -1,6 +1,10 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { AppleMusicService, type MusicInstance, type MusicFactory } from '../src/player/musickit.ts'
+import {
+  AppleMusicService,
+  type MusicInstance,
+  type MusicFactory,
+} from '../../src/player/musickit.ts'
 const jwt = `${btoa('{"alg":"ES256"}')}.${btoa('{"exp":4102444800,"iss":"TEAM"}')}.signed`
 function fixture() {
   const requests: string[] = []

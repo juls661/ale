@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { NativeAppleMusicService } from '../src/player/native.ts'
+import { NativeAppleMusicService } from '../../src/player/native.ts'
 
 test('native permission denial never reports a connected account', async () => {
   const service = new NativeAppleMusicService(async () => {

@@ -1,6 +1,6 @@
 # Build and develop Ale
 
-[← Back to Ale](../README.md)
+[← Back to Ale](../../README.md)
 
 ## Requirements
 
@@ -38,6 +38,9 @@ Vite prints a loopback URL. Open it in your browser. The native Windows host loa
 | `npm run test:e2e`      | Run Playwright playback and accessibility tests                       |
 | `npm run check`         | Run unit tests, lint, production build and browser tests              |
 | `npm run windows:build` | Check native navigation and publish Windows x64 output                |
+| `npm run macos:prepare` | Build and stage frontend/resources for Xcode                          |
+| `npm run macos:test`    | Run Mac navigation, resource and bridge policy checks                 |
+| `npm run macos:build`   | Build and package the universal Mac app                               |
 | `npm run format:check`  | Check source and documentation formatting                             |
 | `npm run format`        | Apply repository formatting                                           |
 | `npm run screenshots`   | Capture desktop, settings and narrow layouts from a running local app |
@@ -49,7 +52,7 @@ npx playwright install chromium
 npm run check
 ```
 
-Browser tests synthesize their own WAV and stub the external Apple SDK for error paths. They do not establish that real Apple authentication or protected streaming works. See the [verification record](verification.md).
+Browser tests synthesize their own WAV and stub the external Apple SDK for error paths. They do not establish that real Apple authentication or protected streaming works. See the [verification record](../verification.md).
 
 To run browser tests against the built production interface and its CSP:
 
@@ -75,9 +78,9 @@ Install a [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), then
 npm run windows:build
 ```
 
-The script builds React, runs `windows/Ale.PolicyTests`, publishes the self-contained x64 host, and copies documentation and license notices to `release/Ale-win-x64/`. Set `ALE_DOTNET` to the SDK executable’s absolute path if `dotnet` is not on PATH.
+The script builds React, runs `desktop/windows/Ale.PolicyTests`, publishes the self-contained x64 host, and copies documentation and license notices to `build/releases/windows/`. Set `ALE_DOTNET` to the SDK executable’s absolute path if `dotnet` is not on PATH.
 
-Keep the output folder together when transferring it to Windows. Packaging cleans this generated directory first; do not store source files or personal files inside it. `release/`, `dist/`, test reports, native `bin/` and `obj/` directories and `node_modules/` are ignored by Git.
+Keep the output folder together when transferring it to Windows. Packaging cleans its generated platform directory first; do not store source files or personal files inside it. `build/`, `local/`, native `bin/` and `obj/` directories and `node_modules/` are ignored by Git.
 
 The preview is unsigned. Publisher signing, installer/update behavior, and real runtime testing remain release tasks. Do not disable Windows protections to run an unfamiliar binary.
 
@@ -87,8 +90,8 @@ The preview is unsigned. Publisher signing, installer/update behavior, and real 
 - `src/player/controller.ts` coordinates playback and queue state.
 - `src/player/musickit.ts` isolates the official Apple SDK.
 - `src/player/model.ts` holds shared track, token and URL helpers.
-- `windows/Ale.Windows/` hosts the frontend in a constrained WebView2 window.
-- `windows/Ale.PolicyTests/` checks the platform-neutral navigation policy.
+- `desktop/windows/Ale.Windows/` hosts the frontend in a constrained WebView2 window.
+- `desktop/windows/Ale.PolicyTests/` checks the platform-neutral navigation policy.
 - `.github/workflows/windows.yml` runs verification and publishes a workflow artifact when triggered on GitHub.
 
 There is no iPhone remote, LAN pairing service or developer-operated backend in this milestone.
@@ -101,7 +104,7 @@ Start the app in one terminal, then run `npm run screenshots` in another. Captur
 
 Keep `.p8`, `.p12`, `.pfx`, tokens and `.env` files out of Git. Ignore rules reduce accidental additions but do not scan for secrets already embedded in source. Inspect changes before publishing and never attach browser profiles to issues.
 
-Local implementation notes are preserved in the ignored `.planning/` directory. Public-facing guides and release records live in `docs/`.
+Local implementation notes are preserved in the ignored `local/planning/` directory. Exports, unpublished research and scratch files are grouped alongside them in `local/`. Public-facing guides and release records live in `docs/`; the [folder guide](../architecture/repository-layout.md) explains the complete layout.
 
 ## macOS development
 
@@ -112,8 +115,8 @@ npm ci
 npm run macos:build
 ```
 
-This runs the frontend production build, stages dependency notices, checks the native navigation/resource policy, compiles Apple silicon and Intel binaries, and assembles an ad-hoc signed development app at `release/Ale-mac-universal/Ale.app`.
+This runs the frontend production build, stages dependency notices, checks the native navigation/resource policy, compiles Apple silicon and Intel binaries, and assembles an ad-hoc signed development app at `build/releases/macos/Ale.app`.
 
-For Xcode: `npm run macos:prepare`, then open `macos/Ale.xcodeproj`, choose Ale / My Mac and Run. Repeat preparation after frontend/dependency/privacy changes. Xcode uses standard resource copying, with build-script sandboxing left enabled. The repository Xcode project has no personal signing team. Account-dependent Apple Music setup and the owner's original-project integration are explained in [the Mac guide](macos.md).
+For Xcode: `npm run macos:prepare`, then open `desktop/macos/Ale.xcodeproj`, choose Ale / My Mac and Run. Repeat preparation after frontend/dependency/privacy changes. Xcode uses standard resource copying, with build-script sandboxing left enabled. The repository Xcode project has no personal signing team. Account-dependent Apple Music setup and the owner's original-project integration are explained in [the Mac guide](macos.md).
 
 Native checks: `npm run macos:test`. Browser checks: `ALE_PRODUCTION=1 npx playwright test --browser chromium` or `--browser webkit` after installing the corresponding Playwright runtime. The Mac CI workflow runs both and builds the Xcode target. Live MusicKit authorization/subscription playback cannot be tested with transport stubs.

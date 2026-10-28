@@ -1,10 +1,7 @@
 node_modules/
-dist/
-release/
+build/
+local/
 **/bin/
 **/obj/
 package-lock.json
-test-results/
-playwright-report/
-.planning/
 *.svg

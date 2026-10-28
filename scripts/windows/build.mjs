@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process'
 import { mkdirSync, cpSync, readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs'
 import { resolve, join } from 'node:path'
 import { collectRuntimeNotices } from './collect-runtime-notices.mjs'
-const root = resolve(import.meta.dirname, '..')
+const root = resolve(import.meta.dirname, '../..')
 const command = (exe, args, options = {}) => {
   const result = spawnSync(exe, args, { cwd: root, stdio: 'inherit', ...options })
   if (result.error) throw result.error
@@ -12,13 +12,19 @@ command(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build'], {
   shell: process.platform === 'win32',
 })
 const dotnet = process.env.ALE_DOTNET || 'dotnet'
-command(dotnet, ['run', '--project', 'windows/Ale.PolicyTests', '--configuration', 'Release'])
-const output = join(root, 'release', 'Ale-win-x64')
+command(dotnet, [
+  'run',
+  '--project',
+  'desktop/windows/Ale.PolicyTests',
+  '--configuration',
+  'Release',
+])
+const output = join(root, 'build', 'releases', 'windows')
 // This directory is generated exclusively by this script; clean stale publish assets.
 rmSync(output, { recursive: true, force: true })
 command(dotnet, [
   'publish',
-  'windows/Ale.Windows',
+  'desktop/windows/Ale.Windows',
   '-c',
   'Release',
   '-r',
@@ -39,8 +45,11 @@ const nugetRoot =
   process.env.NUGET_PACKAGES ||
   join(process.env.USERPROFILE || process.env.HOME, '.nuget', 'packages')
 collectRuntimeNotices({ depsPath: join(output, 'Ale.deps.json'), nugetRoot, output: licenses })
-mkdirSync(join(output, 'scripts'), { recursive: true })
-cpSync(join(root, 'scripts', 'developer-token.mjs'), join(output, 'scripts', 'developer-token.mjs'))
+mkdirSync(join(output, 'scripts', 'apple-music'), { recursive: true })
+cpSync(
+  join(root, 'scripts', 'apple-music', 'developer-token.mjs'),
+  join(output, 'scripts', 'apple-music', 'developer-token.mjs'),
+)
 cpSync(join(root, 'README.md'), join(output, 'README.md'))
 mkdirSync(join(output, 'docs'), { recursive: true })
 cpSync(join(root, 'docs'), join(output, 'docs'), { recursive: true })
@@ -64,9 +73,9 @@ Follow Windows and organization security policies; do not disable protections.
 Full Apple subscription playback and native Windows runtime behavior still require a test on your PC.
 The iPhone remote is a later milestone.
 
-Privacy: docs/privacy.md
+Privacy: docs/legal/privacy.md
 Test results and remaining checks: docs/verification.md
-Release/legal review: docs/compliance.md
+Release/legal review: docs/legal/compliance.md
 Third-party notices: THIRD_PARTY_NOTICES.md and licenses/
 `,
 )

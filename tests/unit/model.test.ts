@@ -6,7 +6,7 @@ import {
   safeAppleUrl,
   safeArtwork,
   nextIndex,
-} from '../src/player/model.ts'
+} from '../../src/player/model.ts'
 
 const token = (payload: object) =>
   `${btoa(JSON.stringify({ alg: 'ES256', kid: 'KEY123' }))}.${btoa(JSON.stringify(payload))}.signature`

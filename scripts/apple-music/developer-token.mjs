@@ -23,7 +23,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const [teamId, keyId, keyPath] = process.argv.slice(2)
   if (!keyPath) {
     console.error(
-      'Usage: node scripts/developer-token.mjs TEAM_ID KEY_ID /absolute/path/to/AuthKey.p8',
+      'Usage: node scripts/apple-music/developer-token.mjs TEAM_ID KEY_ID /absolute/path/to/AuthKey.p8',
     )
     process.exit(1)
   }

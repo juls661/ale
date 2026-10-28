@@ -16,6 +16,7 @@ const csp = [
 ].join('; ')
 export default defineConfig(({ command }) => ({
   base: './',
+  build: { outDir: 'build/web', emptyOutDir: true },
   plugins: [
     react(),
     ...(command === 'build'

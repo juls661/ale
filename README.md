@@ -10,7 +10,7 @@
 ![.NET 10 and WebView2](https://img.shields.io/badge/desktop-.NET_10_%2B_WebView2-C9D8B5?style=flat-square&labelColor=20261B)
 ![Swift and MusicKit](https://img.shields.io/badge/mac-Swift_%2B_MusicKit-EFB17D?style=flat-square&labelColor=20261B)
 
-[Get started](#get-started) · [Mac & Xcode](docs/macos.md) · [Windows Apple Music setup](docs/apple-music.md) · [Build & test](docs/development.md) · [Privacy](docs/privacy.md)
+[Get started](#get-started) · [Mac & Xcode](docs/guides/macos.md) · [Windows Apple Music setup](docs/guides/apple-music.md) · [Build & test](docs/guides/development.md) · [Privacy](docs/legal/privacy.md)
 
 </div>
 
@@ -37,10 +37,10 @@ Ale brings local audio and an official Apple Music® integration into a quiet, f
 
 ## Get started
 
-| Platform                          | Runtime                        | Build command           | Output                              |
-| --------------------------------- | ------------------------------ | ----------------------- | ----------------------------------- |
-| macOS 14+ · Apple silicon & Intel | Swift, WebKit, native MusicKit | `npm run macos:build`   | `release/Ale-mac-universal/Ale.app` |
-| Windows 11 · x64                  | .NET 10, WebView2              | `npm run windows:build` | `release/Ale-win-x64/Ale.exe`       |
+| Platform                          | Runtime                        | Build command           | Output                           |
+| --------------------------------- | ------------------------------ | ----------------------- | -------------------------------- |
+| macOS 14+ · Apple silicon & Intel | Swift, WebKit, native MusicKit | `npm run macos:build`   | `build/releases/macos/Ale.app`   |
+| Windows 11 · x64                  | .NET 10, WebView2              | `npm run windows:build` | `build/releases/windows/Ale.exe` |
 
 ### Run the Mac preview
 
@@ -51,9 +51,9 @@ npm ci
 npm run macos:build
 ```
 
-Open `release/Ale-mac-universal/Ale.app` and choose **Open files** to play unprotected audio you have the right to use. This is an ad-hoc signed local development build, not a notarized public release.
+Open `build/releases/macos/Ale.app` and choose **Open files** to play unprotected audio you have the right to use. This is an ad-hoc signed local development build, not a notarized public release.
 
-For Xcode development, run `npm run macos:prepare`, then open **[macos/Ale.xcodeproj](macos/Ale.xcodeproj)** and choose **Ale → My Mac**. Native Apple Music requires your own development team, a registered app identifier with MusicKit App Service, and an active subscription. **No developer JWT is pasted into the Mac app.** Follow the [Mac setup guide](docs/macos.md) for signing, privacy, platform differences and remaining tests.
+For Xcode development, run `npm run macos:prepare`, then open **[desktop/macos/Ale.xcodeproj](desktop/macos/Ale.xcodeproj)** and choose **Ale → My Mac**. Native Apple Music requires your own development team, a registered app identifier with MusicKit App Service, and an active subscription. **No developer JWT is pasted into the Mac app.** Follow the [Mac setup guide](docs/guides/macos.md) for signing, privacy, platform differences and remaining tests.
 
 ### Run the Windows preview
 
@@ -64,7 +64,7 @@ If you already have `Ale-win-x64-preview.zip` from a local build:
 1. Transfer it to your **Windows 11 x64** PC.
 2. Extract the **entire folder**; keep `wwwroot` and the DLLs beside `Ale.exe`.
 3. Open **Ale.exe**, choose **Open files**, and try an unprotected audio file you own.
-4. Follow the [Apple Music setup guide](docs/apple-music.md) to connect your account.
+4. Follow the [Apple Music setup guide](docs/guides/apple-music.md) to connect your account.
 
 The [.NET runtime](https://dotnet.microsoft.com/download/dotnet/10.0) is bundled in the Windows build. The playback PC needs [Microsoft WebView2 Evergreen Runtime](https://developer.microsoft.com/microsoft-edge/webview2/). This preview is unsigned; follow your Windows and organization security policies.
 
@@ -91,10 +91,10 @@ npm run windows:build
 The script builds the frontend, checks the native navigation policy, publishes the self-contained Windows x64 app, and gathers dependency notices into:
 
 ```text
-release/Ale-win-x64/
+build/releases/windows/
 ```
 
-Building on macOS is supported; running the resulting executable requires Windows. Apple credentials are not needed to compile. See the [development guide](docs/development.md) for requirements, commands, and CI details.
+Building on macOS is supported; running the resulting executable requires Windows. Apple credentials are not needed to compile. See the [development guide](docs/guides/development.md) for requirements, commands, and CI details.
 
 </details>
 
@@ -105,7 +105,7 @@ You need an **Apple Developer account**, a MusicKit media identifier/private key
 
 Generate a signed developer token locally, then enter it in **Ale → Settings → Developer token**. Finish authentication in Apple’s own window.
 
-**Never commit a token or private key, and never paste your `.p8` signing key into Ale or an issue.** The [Apple Music guide](docs/apple-music.md) walks through setup, token generation, and the first Windows playback test.
+**Never commit a token or private key, and never paste your `.p8` signing key into Ale or an issue.** The [Apple Music guide](docs/guides/apple-music.md) walks through setup, token generation, and the first Windows playback test.
 
 </details>
 
@@ -113,7 +113,7 @@ Generate a signed developer token locally, then enter it in **Ale → Settings �
 
 The Mac port adds native security checks and adapter regressions to the shared player suite. The verification record includes **22 unit tests, 9 browser scenarios in each of Chromium and WebKit, and 23 Mac navigation/resource/bridge assertions**. Both Mac architectures compile; the portable Xcode project and the owner's original project build. Tested states reported no axe violations for the selected WCAG rule tags. These are recorded test results, not a live CI badge or a full accessibility audit.
 
-Live protected playback, Apple’s own dialogs, VoiceOver/Narrator, display scaling, and release-specific legal requirements remain open checks. Read the [verification record](docs/verification.md) and [compliance/release checklist](docs/compliance.md) for the exact limits.
+Live protected playback, Apple’s own dialogs, VoiceOver/Narrator, display scaling, and release-specific legal requirements remain open checks. Read the [verification record](docs/verification.md) and [compliance/release checklist](docs/legal/compliance.md) for the exact limits.
 
 ## Vibe-code disclaimer
 
@@ -125,19 +125,20 @@ AI-generated code can contain mistakes, fragile assumptions, and security or acc
 
 ```text
 ale/
-├── .github/          Windows/Mac build workflows and contribution guide
-├── docs/             Setup guides, privacy, verification, and release review
-│   └── images/       Original README banner and interface screenshot
-├── public/           Ale’s original SVG app mark
-├── macos/            Native Mac host, Xcode project and security checks
-├── scripts/          Desktop packaging and local token generation
-│   └── dev/          Development-only UI inspection helper
-├── src/              React interface, components, and playback adapters
-├── tests/            Unit, playback, and accessibility tests
-└── windows/          Native Windows host and navigation-policy checks
+├── src/              Shared interface, components and playback logic
+├── desktop/          Native app projects
+│   ├── macos/        Swift host, Xcode project and native checks
+│   └── windows/      .NET/WebView2 host and native checks
+├── scripts/          Tools grouped into macos, windows, apple-music and dev
+├── tests/            unit/ regressions and e2e/ browser scenarios
+├── public/           Original app assets
+├── docs/             guides/, legal/, architecture/, plans/ and images/
+├── .github/          CI workflows and contribution instructions
+├── build/            Generated apps, frontend, Xcode data and test results*
+└── local/            Preserved exports, research and scratch work*
 ```
 
-Dependencies, build outputs, test reports, private keys, environment files, and local planning notes are excluded from Git. Standard Vite, TypeScript, lint, and formatting configuration stays at the root for tool discovery.
+\* Local folders excluded from Git. See the [folder guide](docs/architecture/repository-layout.md) and [documentation index](docs/README.md). Standard Vite, TypeScript, lint and formatting configuration stays at the root for tool discovery.
 
 ## Contributing
 
@@ -157,6 +158,6 @@ A license for **Ale’s own source code has not been selected yet**; do not assu
 
 **Less noise. More feeling.**
 
-[Privacy](docs/privacy.md) · [Verification](docs/verification.md) · [Release review](docs/compliance.md)
+[Privacy](docs/legal/privacy.md) · [Verification](docs/verification.md) · [Release review](docs/legal/compliance.md)
 
 </div>

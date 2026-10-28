@@ -15,10 +15,10 @@
 
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* Ale.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ale.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-000000000000000000000200 = {isa = PBXFileReference; lastKnownFileType = folder; path = "Resources/wwwroot"; sourceTree = "<group>"; };
-000000000000000000000201 = {isa = PBXFileReference; lastKnownFileType = folder; path = "Resources/licenses"; sourceTree = "<group>"; };
-000000000000000000000202 = {isa = PBXFileReference; lastKnownFileType = text; path = "Resources/THIRD_PARTY_NOTICES.md"; sourceTree = "<group>"; };
-000000000000000000000203 = {isa = PBXFileReference; lastKnownFileType = text; path = "Resources/PRIVACY.md"; sourceTree = "<group>"; };
+000000000000000000000200 = {isa = PBXFileReference; lastKnownFileType = folder; path = "../../build/macos/resources/wwwroot"; sourceTree = "<group>"; };
+000000000000000000000201 = {isa = PBXFileReference; lastKnownFileType = folder; path = "../../build/macos/resources/licenses"; sourceTree = "<group>"; };
+000000000000000000000202 = {isa = PBXFileReference; lastKnownFileType = text; path = "../../build/macos/resources/THIRD_PARTY_NOTICES.md"; sourceTree = "<group>"; };
+000000000000000000000203 = {isa = PBXFileReference; lastKnownFileType = text; path = "../../build/macos/resources/PRIVACY.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

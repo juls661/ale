@@ -25,5 +25,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Ale-win-x64-preview
-          path: release/Ale-win-x64/
+          path: build/releases/windows/
           if-no-files-found: error

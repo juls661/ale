@@ -1,20 +1,12 @@
 # Dependencies
 node_modules/
 
-# Frontend and desktop build output
-dist/
-dist-ssr/
-release/
-DerivedData/
-macos/Resources/
+# Generated frontend, packages, Xcode builds and test output
+/build/
 **/xcuserdata/
 *.xcuserstate
 **/bin/
 **/obj/
-
-# Test output
-playwright-report/
-test-results/
 
 # Local secrets and environment settings
 .env
@@ -29,8 +21,8 @@ test-results/
 logs/
 *.log
 
-# Local planning notes (preserved, not published)
-.planning/
+# Local exports, research and scratch work (preserved, not published)
+/local/
 
 # Generated screenshots; the curated desktop image and banner are committed
 # along with the documentation.

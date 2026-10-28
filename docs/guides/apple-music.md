@@ -1,6 +1,6 @@
 # Connect Apple Music
 
-[← Back to Ale](../README.md)
+[← Back to Ale](../../README.md)
 
 Ale uses Apple’s official MusicKit JS SDK for authorization and streaming. You need an Apple Developer account, a MusicKit media identifier/private key, and an active Apple Music subscription for full tracks. Real subscription playback in the Windows host still needs verification.
 
@@ -11,7 +11,7 @@ Ale uses Apple’s official MusicKit JS SDK for authorization and streaming. You
 3. From the repository root (or the extracted Windows package, which includes the standalone helper), use Node.js 24 to generate a signed developer JWT locally:
 
    ```sh
-   node scripts/developer-token.mjs TEAMID1234 KEYID12345 /absolute/path/to/AuthKey.p8
+   node scripts/apple-music/developer-token.mjs TEAMID1234 KEYID12345 /absolute/path/to/AuthKey.p8
    ```
 
    Replace the example identifiers and path with your own. The helper makes no network request; it prints a signed token valid for 30 days. Keep the token private. Do not commit it or paste it into chat or GitHub issues.
@@ -43,4 +43,4 @@ If protected playback fails in the Windows app, run `npm run dev` on Windows and
 - **Clear Ale data** stops playback, releases selected local files, removes the queue and clears Ale’s origin storage.
 - **Clear Apple browser session & close** in the desktop app clears the entire dedicated Ale WebView2 profile and closes Ale.
 
-Apple may retain sign-in in another browser context. See the [privacy notice](privacy.md) for profile location, retention and manual clearing instructions.
+Apple may retain sign-in in another browser context. See the [privacy notice](../legal/privacy.md) for profile location, retention and manual clearing instructions.

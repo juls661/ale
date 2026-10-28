@@ -4,7 +4,7 @@ Thanks for helping improve Ale. It is an experimental personal project built wit
 
 ## Work locally
 
-Use Node.js 24. See the [development guide](../docs/development.md) for .NET and Windows requirements.
+Use Node.js 24. See the [development guide](../docs/guides/development.md) for .NET and Windows requirements.
 
 ```sh
 npm ci

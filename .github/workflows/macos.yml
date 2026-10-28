@@ -31,11 +31,11 @@ jobs:
         env:
           ALE_PRODUCTION: '1'
       - name: Compile Xcode target without an Apple signing account
-        run: xcodebuild -project macos/Ale.xcodeproj -scheme Ale -configuration Debug -destination 'platform=macOS' -derivedDataPath release/Xcode CODE_SIGNING_ALLOWED=NO build
+        run: xcodebuild -project desktop/macos/Ale.xcodeproj -scheme Ale -configuration Debug -destination 'platform=macOS' -derivedDataPath build/xcode/repository CODE_SIGNING_ALLOWED=NO build
       - name: Archive development app
-        run: ditto -c -k --sequesterRsrc --keepParent release/Ale-mac-universal/Ale.app release/Ale-macos-preview.zip
+        run: ditto -c -k --sequesterRsrc --keepParent build/releases/macos/Ale.app build/releases/Ale-macos-preview.zip
       - uses: actions/upload-artifact@v4
         with:
           name: Ale-macos-developer-preview
-          path: release/Ale-macos-preview.zip
+          path: build/releases/Ale-macos-preview.zip
           retention-days: 14

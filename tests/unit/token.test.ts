@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { generateKeyPairSync, verify } from 'node:crypto'
-import { createDeveloperToken } from '../scripts/developer-token.mjs'
+import { createDeveloperToken } from '../../scripts/apple-music/developer-token.mjs'
 test('developer tokens are verifiable ES256 JWTs with bounded expiry', () => {
   const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' })
   const token = createDeveloperToken(privateKey, 'TEAM123456', 'KEY1234567', 1000)

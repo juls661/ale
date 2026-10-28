@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { PlayerController } from '../src/player/controller.ts'
-import { AppleMusicService, type MusicInstance } from '../src/player/musickit.ts'
+import { PlayerController } from '../../src/player/controller.ts'
+import { AppleMusicService, type MusicInstance } from '../../src/player/musickit.ts'
 class FakeAudio extends EventTarget {
   paused = true
   currentTime = 0

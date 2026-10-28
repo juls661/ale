@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { collectRuntimeNotices } from '../scripts/collect-runtime-notices.mjs'
+import { collectRuntimeNotices } from '../../scripts/windows/collect-runtime-notices.mjs'
 
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'ale-license-test-'))

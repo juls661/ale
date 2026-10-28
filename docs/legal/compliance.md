@@ -40,4 +40,4 @@ Suitable for developer testing, subject to the verification record. Public relea
 
 ## Second review
 
-See [the U.S. personal-to-free-release audit](legal-audit-2026-10-27.md) for concrete corrections, evidence, and remaining release gates.
+See [the U.S. personal-to-free-release audit](audit-2026-10-27.md) for concrete corrections, evidence, and remaining release gates.

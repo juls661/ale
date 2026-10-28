@@ -8,7 +8,7 @@
 
 **Tech Stack:** React, TypeScript, Swift, AppKit, SwiftUI, WebKit, MusicKit; macOS 14+.
 
-**Spec:** docs/superpowers/specs/2026-10-28-macos-port-design.md
+**Spec:** docs/architecture/macos-port.md
 
 ## Global Constraints
 
@@ -28,7 +28,7 @@
 
 ### Task 1: Native host and bounded bridge
 
-**Files:** macos/AleMac/*.swift, macos/PolicyTests/main.swift, scripts/build-macos.mjs, scripts/test-macos.mjs, package.json, vite.config.ts.
+**Files:** desktop/macos/AleMac/*.swift, desktop/macos/PolicyTests/main.swift, scripts/macos/build.mjs, scripts/macos/test.mjs, package.json, vite.config.ts.
 
 **Interfaces:** `NativeMusicBridge` handles `connect`, `disconnect`, `search`, `library`, `play`, `resume`, `pause`, `stop`, `seek`, `status`; WebKit replies contain JSON objects. Native tracks match the existing Track type. `NavigationPolicy` validates local URLs, external Apple links and resource paths.
 
@@ -39,7 +39,7 @@
 
 ### Task 2: Shared frontend Mac adapter
 
-**Files:** src/player/native.ts, src/player/service.ts, src/player/controller.ts, src/App.tsx, tests/native.test.ts, tests/app.spec.ts.
+**Files:** src/player/native.ts, src/player/service.ts, src/player/controller.ts, src/App.tsx, tests/unit/native.test.ts, tests/e2e/app.spec.ts.
 
 **Interfaces:** `MusicService` preserves the existing AppleMusicService contract. `NativeAppleMusicService` maps bridge commands to that contract. `createMusicService()` selects the native adapter only when the host bridge exists.
 
@@ -50,7 +50,7 @@
 
 ### Task 3: Repository presentation, release record and integration
 
-**Files:** README.md, docs/macos.md, docs/privacy.md, docs/compliance.md, docs/verification.md, THIRD_PARTY_NOTICES.md, .github/workflows/macos.yml, .gitignore.
+**Files:** README.md, docs/guides/macos.md, docs/legal/privacy.md, docs/legal/compliance.md, docs/verification.md, THIRD_PARTY_NOTICES.md, .github/workflows/macos.yml, .gitignore.
 
 - [x] Document Mac setup, the owner-created Xcode integration and exact verification limits.
 - [x] Add Mac build CI and ignore generated Xcode user/build state.
