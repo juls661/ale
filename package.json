@@ -12,6 +12,9 @@
     "test:e2e": "playwright test",
     "check": "npm test && npm run lint && npm run build && npm run test:e2e",
     "windows:build": "node scripts/build-windows.mjs",
+    "macos:build": "node scripts/build-macos.mjs",
+    "macos:prepare": "npm run build && node scripts/prepare-macos.mjs",
+    "macos:test": "node scripts/test-macos.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "screenshots": "node scripts/dev/inspect-ui.mjs"
@@ -36,5 +39,5 @@
     "typescript-eslint": "^8.44.0",
     "vite": "^7.1.7"
   },
-  "description": "Ale, an independent Windows music player"
+  "description": "Ale, an independent music player for Windows and macOS"
 }

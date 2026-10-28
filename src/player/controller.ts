@@ -1,4 +1,5 @@
-import { AppleMusicService } from './musickit.ts'
+import { createMusicService } from './service.ts'
+import type { MusicService } from './service.ts'
 import { nextIndex } from './model.ts'
 import type { Track } from './model.ts'
 export type PlayerState = {
@@ -18,7 +19,7 @@ export type PlayerState = {
 }
 export class PlayerController {
   private audio: HTMLAudioElement
-  private apple: AppleMusicService
+  private apple: MusicService
   private listeners = new Set<() => void>()
   private playbackEpoch = 0
   private pendingAdvance: number | undefined
@@ -37,12 +38,11 @@ export class PlayerController {
     error: '',
     notice: '',
   }
-  constructor(
-    audio: HTMLAudioElement = new Audio(),
-    apple: AppleMusicService = new AppleMusicService(),
-  ) {
+  constructor(audio: HTMLAudioElement = new Audio(), apple: MusicService = createMusicService()) {
     this.audio = audio
     this.apple = apple
+    this.apple.onConnectionChange = (connected) => this.patch({ connected })
+    this.apple.onError = (error) => this.patch({ error })
     const update = () => {
       if (this.current?.source === 'local')
         this.patch({
@@ -247,7 +247,12 @@ export class PlayerController {
       .slice(0, 500)
       .filter((f) => f.size > 0 && /\.(mp3|wav|m4a|aac|ogg|flac)$/i.test(f.name))
     const tracks: Track[] = accepted.map((file) => ({
-      id: crypto.randomUUID(),
+      id:
+        typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
+              byte.toString(16).padStart(2, '0'),
+            ).join(''),
       source: 'local',
       title: file.name.replace(/\.[^.]+$/, ''),
       artist: 'Local file',
@@ -295,7 +300,9 @@ export class PlayerController {
         this.patch({
           connected: false,
           ...(this.current?.source === 'apple' ? { playing: false } : {}),
-          notice: 'Disconnected from Ale. Apple may retain a browser sign-in session.',
+          notice: this.apple.nativeAuthorization
+            ? 'Disconnected from Ale. macOS retains Apple Music permission; revoke it in System Settings.'
+            : 'Disconnected from Ale. Apple may retain a browser sign-in session.',
         })
       }
     })
@@ -329,9 +336,13 @@ export class PlayerController {
         position: 0,
         duration: 0,
         connected: false,
-        notice: 'Ale data cleared. Apple may retain its browser sign-in session.',
+        notice: this.apple.nativeAuthorization
+          ? 'Ale data cleared. macOS retains Apple Music permission; revoke it in System Settings.'
+          : 'Ale data cleared. Apple may retain its browser sign-in session.',
         error: disconnectFailed
-          ? 'Apple could not confirm sign-out. Clear the desktop browser profile or sign out at music.apple.com.'
+          ? this.apple.nativeAuthorization
+            ? 'Apple Music could not confirm playback stopped. Close Ale and check the Music app.'
+            : 'Apple could not confirm sign-out. Clear the desktop browser profile or sign out at music.apple.com.'
           : '',
       })
       this.media()

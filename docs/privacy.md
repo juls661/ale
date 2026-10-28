@@ -1,6 +1,6 @@
 # Ale privacy notice — personal preview 0.1.0
 
-Effective date: October 27, 2026. Current scope: personal testing; any later public release is intended to be free and offered in the United States.
+Effective date: October 28, 2026. Current scope: personal testing on Windows and macOS; any later public release is intended to be free and offered in the United States.
 
 Ale has no developer-operated account system, telemetry, advertisements, crash reporting or cloud database. The developer does not receive your files, searches, tokens or playback history through an Ale service.
 
@@ -9,6 +9,8 @@ Ale has no developer-operated account system, telemetry, advertisements, crash r
 Only files you explicitly select are opened. Their names, contents and temporary playback URLs remain on your device for this session. Closing Ale releases the file selections and queue. Clear Ale data stops playback and releases all selected-file URLs. No music is uploaded. Runtime decoding/format support varies.
 
 ## Apple Music
+
+The following JavaScript SDK and browser-token description applies to Windows and ordinary browsers. The Mac app uses the native integration described below.
 
 Before connecting, Ale makes no Apple Music network requests. Clicking Connect loads Apple's official MusicKit JavaScript SDK from Apple, configures it with your signed developer token and opens Apple's authorization window. Apple, rather than Ale's developer, receives sign-in, network/device information, searches, library requests and playback activity. Apple artwork is loaded from Apple's servers. Your active Apple Music subscription and service terms govern full playback.
 
@@ -21,6 +23,14 @@ Clear Ale data stops playback, disconnects the MusicKit instance, releases selec
 ## Windows runtime
 
 Ale stores its dedicated WebView2 browser profile under `%LOCALAPPDATA%\Ale\WebView2`. Microsoft supplies and updates WebView2 independently under its own terms; operating-system and browser runtime diagnostics are governed by your Windows/Microsoft settings. Ale does not add an analytics service. Ale does not open a LAN listener; phone pairing is not implemented in this release.
+
+## macOS runtime and Apple Music
+
+The Mac app bundles Ale's interface in a sandboxed WebKit host with a nonpersistent website-data store. It opens no listener and loads no remote executable interface or MusicKit JavaScript SDK. Explicitly selected local files are read through the native file picker and temporary browser URLs. The Mac's supported audio decoders determine format support.
+
+Connect requests macOS MusicKit authorization and checks subscription access. Apple receives account, catalog/library and playback requests under its own policies. Native MusicKit manages credentials; Ale asks for no password, private key or developer token and does not operate a credential server. System frameworks, the Music app and macOS may keep account/authorization data and diagnostics outside Ale's web session. Those are governed by Apple and your system settings.
+
+Disconnect and Clear Ale data stop Ale's native player and discard Ale's in-memory song references and connection state. They do not sign out your Apple account or revoke macOS MusicKit permission. Revoke access in System Settings → Privacy & Security → Media & Apple Music. Closing the final Ale window quits the Mac app; the native player is stopped on termination. Ale's own temporary web store is discarded when its web view is released. No claim is made that clearing Ale removes data held by Apple or system services.
 
 This notice describes the current personal preview. Before distribution, identify the publisher/contact, territories, applicable privacy obligations, retention and request procedures and update the notice for actual deployment. No contact address or legal entity has been invented.
 

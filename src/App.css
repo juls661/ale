@@ -1461,3 +1461,9 @@ h1 {
     justify-self: start;
   }
 }
+.native-volume-note {
+  max-width: 90px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--text-muted, #b8bcb6);
+}

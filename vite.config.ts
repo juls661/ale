@@ -15,6 +15,7 @@ const csp = [
   "form-action 'self' https://*.apple.com",
 ].join('; ')
 export default defineConfig(({ command }) => ({
+  base: './',
   plugins: [
     react(),
     ...(command === 'build'

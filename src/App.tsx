@@ -1,6 +1,7 @@
 import { useRef, useState, useSyncExternalStore } from 'react'
 import type { FormEvent } from 'react'
 import { PlayerController } from './player/controller'
+import { nativeBridge } from './player/native'
 import type { Track } from './player/model'
 import { formatTime } from './player/model'
 import { Icon } from './components/Icon'
@@ -17,6 +18,7 @@ const navigation: { name: View; icon: IconName }[] = [
   { name: 'Queue', icon: 'queue' },
 ]
 function App() {
+  const mac = Boolean(nativeBridge())
   const [player] = useState(() => new PlayerController())
   const state = useSyncExternalStore(player.subscribe, player.snapshot)
   const [view, setView] = useState<View>('Home')
@@ -30,6 +32,7 @@ function App() {
   const fileInput = useRef<HTMLInputElement>(null)
   const main = useRef<HTMLElement>(null)
   const current = state.queue[state.index]
+  const nativeVolume = mac && current?.source === 'apple'
   const go = (next: View) => {
     requestId.current++
     setSearching(false)
@@ -350,8 +353,11 @@ function App() {
               <section className="settings-card">
                 <h2>Apple Music connection</h2>
                 <p>
-                  Sign in through Apple’s own window. An active Apple Music® subscription is
-                  required for full songs. Ale never asks for your Apple password.
+                  {mac
+                    ? 'Connect through macOS and your Apple Music account in the Music app.'
+                    : 'Sign in through Apple’s own window.'}{' '}
+                  An active Apple Music® subscription is required for full songs. Ale never asks for
+                  your Apple password.
                 </p>
                 {state.connected ? (
                   <div className="connected-panel">
@@ -368,6 +374,21 @@ function App() {
                       }}
                     >
                       Disconnect Apple Music
+                    </button>
+                  </div>
+                ) : mac ? (
+                  <div>
+                    <p>
+                      macOS manages Apple Music permission. No developer token or private key is
+                      entered here.
+                    </p>
+                    <button
+                      className="primary-button"
+                      disabled={state.busy}
+                      onClick={() => void player.connect('')}
+                    >
+                      {state.busy ? 'Connecting…' : 'Connect to Apple Music'}
+                      <Icon name="arrow" size={18} />
                     </button>
                   </div>
                 ) : (
@@ -403,8 +424,9 @@ function App() {
                   </form>
                 )}
                 <p className="settings-note">
-                  Protected playback is still awaiting a real Windows test. If the embedded player
-                  cannot stream, test Ale in Microsoft Edge before continuing.
+                  {mac
+                    ? 'Uses Apple’s native MusicKit player. Development signing and the MusicKit App Service are required; full subscription playback still needs a live account test. Apple Music volume uses the Mac’s controls.'
+                    : 'Protected playback is still awaiting a real Windows test. If the embedded player cannot stream, test Ale in Microsoft Edge before continuing.'}
                 </p>
               </section>
               <section className="settings-card">
@@ -415,9 +437,9 @@ function App() {
                   preferences are session-only.
                 </p>
                 <p>
-                  Connecting downloads Apple’s MusicKit SDK. Apple receives your authorization,
-                  searches, library requests and playback activity, and may retain cookies or
-                  browser storage under its own policies. Apple artwork loads from Apple’s servers.
+                  {mac
+                    ? 'Connecting uses the MusicKit framework supplied by macOS. Apple receives your authorization, searches, library requests and playback activity. macOS manages account credentials and permission; Ale uses a temporary web session. Apple artwork loads from Apple’s servers.'
+                    : 'Connecting downloads Apple’s MusicKit SDK. Apple receives your authorization, searches, library requests and playback activity, and may retain cookies or browser storage under its own policies. Apple artwork loads from Apple’s servers.'}
                 </p>
                 <div className="button-row">
                   <button
@@ -447,10 +469,9 @@ function App() {
                   </a>
                 </div>
                 <p className="help-text">
-                  Clear Ale data stops playback and removes selected files, queue and Ale origin
-                  storage. In a browser, remove this site’s data in browser settings to clear
-                  retained sign-in. In the Windows app, the browser-session button clears the
-                  complete Ale WebView2 profile and closes Ale.
+                  {mac
+                    ? 'Clear Ale data stops playback and removes selected files, queue and Ale web storage. It does not sign out your Mac’s Apple account or revoke MusicKit permission. To revoke access, use System Settings → Privacy & Security → Media & Apple Music.'
+                    : 'Clear Ale data stops playback and removes selected files, queue and Ale origin storage. In a browser, remove this site’s data in browser settings to clear retained sign-in. In the Windows app, the browser-session button clears the complete Ale WebView2 profile and closes Ale.'}
                 </p>
               </section>
               <section className="settings-card">
@@ -461,8 +482,8 @@ function App() {
                   reduced-motion and high-contrast preferences and supports browser zoom.
                 </p>
                 <p>
-                  Designed toward WCAG 2.2 AA. Automated checks do not replace Windows Narrator,
-                  keyboard and display testing.
+                  Designed toward WCAG 2.2 AA. Automated checks do not replace{' '}
+                  {mac ? 'VoiceOver' : 'Windows Narrator'}, keyboard and display testing.
                 </p>
               </section>
               <section className="settings-card about-card">
@@ -477,8 +498,7 @@ function App() {
                   </p>
                   <p>
                     Use music you have the right to play. No audio downloads, DRM bypass, or
-                    lossless playback claims. The iPhone remote is planned after Windows playback is
-                    verified.
+                    lossless playback claims. The iPhone remote is planned for a later milestone.
                   </p>
                 </div>
               </section>
@@ -648,13 +668,22 @@ function App() {
           <input
             type="range"
             aria-label="Volume"
-            aria-valuetext={`${Math.round(state.volume * 100)} percent`}
+            aria-valuetext={
+              nativeVolume ? 'Use Mac volume controls' : `${Math.round(state.volume * 100)} percent`
+            }
+            aria-describedby={nativeVolume ? 'native-volume-help' : undefined}
             min={0}
             max={1}
             step="0.01"
             value={state.volume}
+            disabled={nativeVolume}
             onChange={(e) => player.setVolume(Number(e.target.value))}
           />
+          {nativeVolume && (
+            <span id="native-volume-help" className="native-volume-note">
+              Use Mac volume controls
+            </span>
+          )}
           <button className="icon-button" aria-label="Show queue" onClick={() => go('Queue')}>
             <Icon name="queue" />
           </button>

@@ -5,6 +5,10 @@ node_modules/
 dist/
 dist-ssr/
 release/
+DerivedData/
+macos/Resources/
+**/xcuserdata/
+*.xcuserstate
 **/bin/
 **/obj/
 

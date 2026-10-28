@@ -22,6 +22,52 @@ function wav(seconds = 4) {
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
 })
+test('Mac connection uses native authorization and explains native volume and privacy', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    let playing = false
+    Object.defineProperty(window, 'webkit', {
+      configurable: true,
+      value: {
+        messageHandlers: {
+          aleNative: {
+            postMessage: async ({ command }: { command: string }) => {
+              if (command === 'connect') return { connected: true }
+              if (command === 'search')
+                return [
+                  { id: '123', title: 'Mac Song', artist: 'Artist', album: '', duration: 100 },
+                ]
+              if (command === 'play' || command === 'resume') playing = true
+              if (command === 'stop' || command === 'pause') playing = false
+              if (command === 'status')
+                return { connected: true, playing, position: 1, duration: 100, ended: false }
+              return {}
+            },
+          },
+        },
+      },
+    })
+  })
+  await page.reload()
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await expect(page.getByLabel('Developer token')).toHaveCount(0)
+  await expect(page.getByText('macOS manages Apple Music permission')).toBeVisible()
+  await page.getByRole('button', { name: 'Connect to Apple Music', exact: true }).click()
+  await expect(page.getByText('Connected to Apple Music', { exact: true })).toBeVisible()
+  await page.getByRole('searchbox').fill('song')
+  await page.getByRole('searchbox').press('Enter')
+  await page.getByRole('button', { name: 'Play Mac Song', exact: true }).click()
+  await expect(page.getByRole('slider', { name: 'Volume', exact: true })).toBeDisabled()
+  await expect(page.getByText('Use Mac volume controls')).toBeVisible()
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  const a = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze()
+  expect(a.violations).toEqual([])
+  await page.getByRole('button', { name: 'Disconnect Apple Music', exact: true }).click()
+  await expect(page.getByRole('status')).toContainText('macOS')
+})
 test('local files really play, pause, seek, advance and clear', async ({ page }) => {
   await page.locator('input[type=file]').setInputFiles([
     { name: 'First.wav', mimeType: 'audio/wav', buffer: wav() },
@@ -86,8 +132,9 @@ test('home, settings and narrow layout pass automated WCAG checks', async ({ pag
     true,
   )
 })
-test('keyboard skip link reaches main content', async ({ page }) => {
-  await page.keyboard.press('Tab')
+test('keyboard skip link reaches main content', async ({ page, browserName }) => {
+  // WebKit on macOS follows Safari's Option-Tab convention for links.
+  await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab')
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused()
   await page.keyboard.press('Enter')
   await expect(page.getByRole('main')).toBeFocused()
